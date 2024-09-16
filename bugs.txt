@@ -1,0 +1,86 @@
+<Bugs found by PMD and fixed>
+
+1. UnusedPrivateField
+    - Location: Department.java, line 117
+    - Avoid unused private fields such as 'departmentChair'.
+    - Fixing the getDepartmentChair() method to return the correct value (this.departmentChair) resolved this issue.
+
+2. ConstructorCallsOverridableMethod
+    - Location: MyFileDatabase.java, line 26
+    - Overridable method called during object construction: MyFileDatabase.deSerializeObjectFromFile()
+    - Changed the deSerializeObjectFromFile() method from public to private to make it not overridable.
+
+3. ReturnEmptyCollectionRatherThanNull
+    - Location: MyFileDatabase.java, line 54
+    - Return an empty collection rather than null.
+    - Fixed the line to return an empty map to avoid potentially having NullPointerException later
+
+4. AvoidDuplicateLiterals
+    - Location: RouteController.java, line 40 (line number is based on before modifying the file)
+    - The String literal "deptCode" appears 15 times in this file; the first occurrence is on line 40
+    - Defined a constant instead of using the same string literals repeatedly
+
+5. UseLocaleWithCaseConversions
+    - Location: RouteController.java, line 54
+    - When doing a String.toLowerCase()/toUpperCase() call, use a Locale
+    - Used Locale.ROOT to ensure that results are consistent regardless of the environment
+
+6. AvoidDuplicateLiterals
+    - Location: RouteController.java, line 46 (line number is based on before modifying the file)
+    - The String literal "Department Not Found" appears 6 times in this file; the first occurrence is on line 46
+    - Defined a constant instead of using the same string literals repeatedly
+
+7. UseLocaleWithCaseConversions
+    - Location: RouteController.java, line 57
+    - When doing a String.toLowerCase()/toUpperCase() call, use a Locale
+    - Used Locale.ROOT to ensure that results are consistent regardless of the environment
+
+8. AvoidDuplicateLiterals
+    - Location: RouteController.java, line 74 (line number is based on before modifying the file)
+    - The String literal "courseCode" appears 10 times in this file; the first occurrence is on line 74
+    - Defined a constant instead of using the same string literals repeatedly
+
+9. AvoidDuplicateLiterals
+    - Location: RouteController.java, line 84 (line number is based on before modifying the file)
+    - The String literal "Course Not Found" appears 10 times in this file; the first occurrence is on line 84
+    - Defined a constant instead of using the same string literals repeatedly
+
+10. UnusedLocalVariable
+    - Location: RouteController.java, 301
+    - Avoid unused local variables such as 'requestedCourse'.
+    - Fixing the findCourseTime() method to return the correct value of the course timeslot using the variable requestedCourse resolved this issue.
+
+11. AvoidDuplicateLiterals
+    - Location: RouteController.java, line 428 (line number is based on before modifying the file)
+    - The String literal "Attributed was updated successfully." appears 4 times in this file; the first occurrence is on line 428
+    - Defined a constant instead of using the same string literals repeatedly
+
+
+<Other bugs found and fixed>
+
+In Department.java:
+
+1. Line 37, getNumberOfMajors() returning a negated value of this.numberOfMajors
+2. Line 46, getDepartmentChair() not returning the actual value of departmentChair but returning a string literal "this.departmentChair"
+3. Line 68, dropPersonFromMajor() always decreasing numberOfMajors by one and not checking if it's greater than zero
+4. Line 109, toString() not returning the actual value of the string representation but returning a string literal "result.toString()"
+
+In Course.java:
+
+1. Line 26, the constructor initializing enrolledStudentCount to 500 whereas the javadoc comment says the count should start at zero
+2. enrollStudent() always increasing enrolledStudentCount and returning false while it should check if there is space available and return true if student is successfully enrolled and false otherwise
+3. dropStudent() always decreasing enrolledStudentCount and returning false while it should check if a student is enrolled in the course and return true if student is successfully dropped and false otherwise
+4. Line 57, getCourseLocation() returning instructorName instead of courseLocation
+5. Line 62, getInstructorName() returning courseLocation instead of instructorName
+6. Line 104, isCourseFull() having a logic error of incorrectly returning true when the course is not full (enrollmentCapacity > enrolledStudentCount)
+
+In MyFileDatabase.java:
+1. Line 99, the variable filePath can be set as final because the value should not really change after initialization
+
+In RouteController.java:
+
+1. retrieveDepartment() returning the wrong HttpStatus for the if-else cases (was returning OK when department was not found and NOT_FOUND when department was found)
+2. retrieveCourse() returning HttpStatus.FORBIDDEN when the course is found while it should return OK
+3. getMajorCtFromDept() returning a negated value of the number of majors for the requested department and returning HttpStatus.FORBIDDEN when the department is not found (I think it should be NOT_FOUND)
+4. findCourseTime() returning the string literal "some time " instead of the actual timeslot of the course
+5. handleException() returning HttpStatus.OK when an error has occurred could be misleading; I think it would be better to return HttpStatus.INTERNAL_SERVER_ERROR
