@@ -65,6 +65,38 @@ public class RouteControllerUnitTests {
   }
 
   @Test
+  public void retrieveCoursesFoundTwoTest() {
+    ResponseEntity<?> response = testRouteController.retrieveCourses(1004);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertTrue(response.getBody().toString().contains("COMS 1004"));
+    assertTrue(response.getBody().toString().contains("ECON 1004"));
+  }
+
+  @Test
+  public void retrieveCoursesFoundOneTest() {
+    ResponseEntity<?> response = testRouteController.retrieveCourses(4156);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertNotNull(response.getBody());
+    assertTrue(response.getBody().toString().contains("COMS 4156"));
+  }
+
+  @Test
+  public void retrieveCoursesNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.retrieveCourses(9999);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Course Not Found", response.getBody());
+  }
+
+  @Test
+  public void retrieveCoursesInvalidCourseCodeTest() {
+    ResponseEntity<?> response = testRouteController.retrieveCourses(-1004);
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals("Invalid course code. Course codes must be positive integers.",
+        response.getBody());
+  }
+
+  @Test
   public void isCourseFullTrueTest() {
     ResponseEntity<?> response = testRouteController.isCourseFull("IEOR", 2500);
     assertEquals(HttpStatus.OK, response.getStatusCode());
