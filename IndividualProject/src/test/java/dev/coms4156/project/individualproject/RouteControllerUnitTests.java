@@ -225,6 +225,34 @@ public class RouteControllerUnitTests {
   }
 
   @Test
+  public void enrollStudentInCourseSuccessTest() {
+    ResponseEntity<?> response = testRouteController.enrollStudentInCourse("IEOR", 4102);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals("Student successfully enrolled in the course.", response.getBody());
+  }
+
+  @Test
+  public void enrollStudentInCourseFullTest() {
+    ResponseEntity<?> response = testRouteController.enrollStudentInCourse("IEOR", 2500);
+    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+    assertEquals("Student cannot be enrolled because the course is full.", response.getBody());
+  }
+
+  @Test
+  public void enrollStudentInCourseNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.enrollStudentInCourse("IEOR", 9999);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Course Not Found", response.getBody());
+  }
+
+  @Test
+  public void enrollStudentInCourseDeptNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.enrollStudentInCourse("COMM", 1004);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Department Not Found", response.getBody());
+  }
+
+  @Test
   public void setEnrollmentCountSuccessTest() {
     ResponseEntity<?> response = testRouteController.setEnrollmentCount("CHEM", 1403, 115);
     assertEquals(HttpStatus.OK, response.getStatusCode());
