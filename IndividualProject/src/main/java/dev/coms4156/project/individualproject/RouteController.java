@@ -105,7 +105,7 @@ public class RouteController {
 
   /**
    * Displays the details of all courses with the specified course code across all departments
-   * to the user of displays the proper error message in response to the request.
+   * to the user or displays the proper error message in response to the request.
    *
    * @param courseCode A {@code int} representing the course code the user wishes
    *                   to retrieve.
