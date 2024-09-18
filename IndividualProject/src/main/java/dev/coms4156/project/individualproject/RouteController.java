@@ -117,8 +117,8 @@ public class RouteController {
   @GetMapping(value = "/retrieveCourses", produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<?> retrieveCourses(@RequestParam(value = COURSE_CODE) int courseCode) {
     if (courseCode <= 0) {
-      return new ResponseEntity<>("Invalid course code." +
-          " Course codes must be positive integers.", HttpStatus.BAD_REQUEST);
+      return new ResponseEntity<>("Invalid course code."
+          + " Course codes must be positive integers.", HttpStatus.BAD_REQUEST);
     }
 
     try {
@@ -447,6 +447,51 @@ public class RouteController {
       } else {
         return new ResponseEntity<>(COURSE_NOT_FOUND, HttpStatus.NOT_FOUND);
       }
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Attempts to enroll a student in the specified course.
+   *
+   * @param deptCode       A {@code String} representing the department.
+   *
+   * @param courseCode     A {@code int} representing the course within the department.
+   *
+   * @return               A {@code ResponseEntity} object containing an HTTP 200
+   *                       response with an appropriate message or the proper status
+   *                       code in tune with what has happened.
+   */
+  @PatchMapping(value = "/enrollStudentInCourse", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> enrollStudentInCourse(
+      @RequestParam(value = DEPT_CODE) String deptCode,
+      @RequestParam(value = COURSE_CODE) int courseCode) {
+    try {
+      boolean doesDepartmentExists = retrieveDepartment(deptCode.toUpperCase(Locale.ROOT))
+          .getStatusCode() == HttpStatus.OK;
+      if (doesDepartmentExists) {
+        HashMap<String, Department> departmentMapping;
+        departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
+        HashMap<String, Course> coursesMapping;
+        coursesMapping = departmentMapping.get(deptCode.toUpperCase(Locale.ROOT))
+            .getCourseSelection();
+
+        if (!coursesMapping.containsKey(Integer.toString(courseCode))) {
+          return new ResponseEntity<>(COURSE_NOT_FOUND, HttpStatus.NOT_FOUND);
+        } else {
+          Course course = coursesMapping.get(Integer.toString(courseCode));
+          boolean isEnrolled = course.enrollStudent();
+          if (isEnrolled) {
+            return new ResponseEntity<>("Student successfully enrolled in the course.",
+                HttpStatus.OK);
+          } else {
+            return new ResponseEntity<>("Student cannot be enrolled because the course is full.",
+                HttpStatus.BAD_REQUEST);
+          }
+        }
+      }
+      return new ResponseEntity<>(DEPT_NOT_FOUND, HttpStatus.NOT_FOUND);
     } catch (Exception e) {
       return handleException(e);
     }
