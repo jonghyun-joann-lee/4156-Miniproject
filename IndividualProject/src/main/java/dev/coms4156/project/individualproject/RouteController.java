@@ -2,6 +2,7 @@ package dev.coms4156.project.individualproject;
 
 import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -97,6 +98,54 @@ public class RouteController {
 
       }
       return new ResponseEntity<>(DEPT_NOT_FOUND, HttpStatus.NOT_FOUND);
+    } catch (Exception e) {
+      return handleException(e);
+    }
+  }
+
+  /**
+   * Displays the details of all courses with the specified course code across all departments
+   * to the user of displays the proper error message in response to the request.
+   *
+   * @param courseCode A {@code int} representing the course code the user wishes
+   *                   to retrieve.
+   *
+   * @return           A {@code ResponseEntity} object containing either the details of all the
+   *                   courses found and an HTTP 200 response or an appropriate message indicating
+   *                   the proper response.
+   */
+  @GetMapping(value = "/retrieveCourses", produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<?> retrieveCourses(@RequestParam(value = COURSE_CODE) int courseCode) {
+    if (courseCode <= 0) {
+      return new ResponseEntity<>("Invalid course code." +
+          " Course codes must be positive integers.", HttpStatus.BAD_REQUEST);
+    }
+
+    try {
+      HashMap<String, Department> departmentMapping;
+      departmentMapping = IndividualProjectApplication.myFileDatabase.getDepartmentMapping();
+
+      StringBuilder result = new StringBuilder();
+
+      for (Map.Entry<String, Department> entry : departmentMapping.entrySet()) {
+        String deptCode = entry.getKey();
+        Department dept = entry.getValue();
+
+        HashMap<String, Course> coursesMapping = dept.getCourseSelection();
+
+        if (coursesMapping.containsKey(Integer.toString(courseCode))) {
+          Course course = coursesMapping.get(Integer.toString(courseCode));
+          result.append(deptCode).append(" ").append(Integer.toString(courseCode)).append(": \n")
+              .append(course.toString()).append("\n\n");
+        }
+      }
+
+      if (result.length() == 0) {
+        return new ResponseEntity<>(COURSE_NOT_FOUND, HttpStatus.NOT_FOUND);
+      } else {
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
+      }
+
     } catch (Exception e) {
       return handleException(e);
     }
