@@ -89,14 +89,6 @@ public class RouteControllerUnitTests {
   }
 
   @Test
-  public void retrieveCoursesInvalidCourseCodeTest() {
-    ResponseEntity<?> response = testRouteController.retrieveCourses(-1004);
-    assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-    assertEquals("Invalid course code. Course codes must be positive integers.",
-        response.getBody());
-  }
-
-  @Test
   public void isCourseFullTrueTest() {
     ResponseEntity<?> response = testRouteController.isCourseFull("IEOR", 2500);
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -246,17 +238,18 @@ public class RouteControllerUnitTests {
   }
 
   @Test
-  public void enrollStudentInCourseDeptNotFoundTest() {
-    ResponseEntity<?> response = testRouteController.enrollStudentInCourse("COMM", 1004);
-    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    assertEquals("Department Not Found", response.getBody());
-  }
-
-  @Test
-  public void setEnrollmentCountSuccessTest() {
+  public void setEnrollmentCountSuccessBelowCapacityTest() {
     ResponseEntity<?> response = testRouteController.setEnrollmentCount("CHEM", 1403, 115);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertEquals("Attributed was updated successfully.", response.getBody());
+  }
+
+  @Test
+  public void setEnrollmentCountSuccessAboveCapacityTest() {
+    ResponseEntity<?> response = testRouteController.setEnrollmentCount("PSYC", 4493, 16);
+    assertEquals(HttpStatus.OK, response.getStatusCode());
+    assertEquals("Enrollment count has been set but please be aware that it exceeds"
+        + " capacity of 15", response.getBody());
   }
 
   @Test

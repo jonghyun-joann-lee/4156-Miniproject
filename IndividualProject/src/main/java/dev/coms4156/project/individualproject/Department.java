@@ -23,10 +23,33 @@ public class Department implements Serializable {
    */
   public Department(String deptCode, HashMap<String, Course> courses, String departmentChair,
                     int numberOfMajors) {
-    this.courses = courses;
-    this.departmentChair = departmentChair;
-    this.numberOfMajors = numberOfMajors;
-    this.deptCode = deptCode;
+    if (deptCode == null || deptCode.trim().isEmpty()) {
+      this.deptCode = "TBD";
+      System.out.println("Warning: Invalid department code. Default value TBD assigned.");
+    } else {
+      this.deptCode = deptCode;
+    }
+
+    if (courses == null) {
+      this.courses = new HashMap<>();
+      System.out.println("Warning: Courses map is null. Empty map assigned.");
+    } else {
+      this.courses = courses;
+    }
+
+    if (departmentChair == null || departmentChair.trim().isEmpty()) {
+      this.departmentChair = "TBD";
+      System.out.println("Warning: Invalid department chair name. Default value TBD assigned.");
+    } else {
+      this.departmentChair = departmentChair;
+    }
+
+    if (numberOfMajors < 0) {
+      this.numberOfMajors = 0;
+      System.out.println("Warning: Invalid number of majors. Default value 0 assigned.");
+    } else {
+      this.numberOfMajors = numberOfMajors;
+    }
   }
 
   /**
@@ -79,6 +102,13 @@ public class Department implements Serializable {
    * @param course   The Course object to add.
    */
   public void addCourse(String courseId, Course course) {
+    if (courseId == null || courseId.trim().isEmpty()) {
+      return;
+    }
+    if (course == null) {
+      return;
+    }
+
     courses.put(courseId, course);
   }
 
@@ -93,8 +123,30 @@ public class Department implements Serializable {
    */
   public void createCourse(String courseId, String instructorName, String courseLocation,
                            String courseTimeSlot, int capacity) {
-    Course newCourse = new Course(instructorName, courseLocation, courseTimeSlot, capacity);
-    addCourse(courseId, newCourse);
+    boolean isCourseValid = true;
+
+    if (courseId == null || courseId.trim().isEmpty()) {
+      isCourseValid = false;
+    }
+    if (instructorName == null || instructorName.trim().isEmpty()) {
+      isCourseValid = false;
+    }
+    if (courseLocation == null || courseLocation.trim().isEmpty()) {
+      isCourseValid = false;
+    }
+    if (courseTimeSlot == null || courseTimeSlot.trim().isEmpty()) {
+      isCourseValid = false;
+    }
+    if (capacity <= 0) {
+      isCourseValid = false;
+    }
+
+    if (isCourseValid) {
+      Course newCourse = new Course(instructorName, courseLocation, courseTimeSlot, capacity);
+      addCourse(courseId, newCourse);
+    } else {
+      System.out.println("Invalid course. Course not created nor added.");
+    }
   }
 
   /**
