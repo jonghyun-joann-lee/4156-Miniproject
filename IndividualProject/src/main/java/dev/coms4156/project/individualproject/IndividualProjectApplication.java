@@ -95,8 +95,6 @@ public class IndividualProjectApplication implements CommandLineRunner {
     mapping.put("COMS", compSci);
 
     //data for econ dept
-    Course econ1004 = new Course("Sunil Gulati", locations[1], times[2], 300);
-    econ1004.setEnrolledStudentCount(209);
     Course econ1105 = new Course("Waseem Noor", locations[1], times[3], 210);
     econ1105.setEnrolledStudentCount(187);
     Course econ2257 = new Course("Tamrat Gashaw", "428 PUP", times[2], 125);
@@ -115,7 +113,6 @@ public class IndividualProjectApplication implements CommandLineRunner {
     econ4840.setEnrolledStudentCount(67);
 
     courses = new HashMap<>();
-    courses.put("1004", econ1004);
     courses.put("1105", econ1105);
     courses.put("2257", econ2257);
     courses.put("3211", econ3211);
