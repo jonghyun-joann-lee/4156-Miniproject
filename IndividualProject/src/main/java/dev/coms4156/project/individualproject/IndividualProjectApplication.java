@@ -283,6 +283,11 @@ public class IndividualProjectApplication implements CommandLineRunner {
     Department psyc = new Department("PSYC", courses, "Nim Tottenham", 437);
     mapping.put("PSYC", psyc);
 
+    // empty department with no courses for testing
+    courses = new HashMap<>();
+    Department emptyDept = new Department("", courses, "", 0);
+    mapping.put("", emptyDept);
+
     myFileDatabase.setMapping(mapping);
   }
 

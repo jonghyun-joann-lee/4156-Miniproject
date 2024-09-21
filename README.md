@@ -1,3 +1,11 @@
+# Code Clean Up
+
+To make the codebase clean, I ran the following commands in the terminal to see if there were any violations caught.
+
+`mvn checkstyle:check`
+
+`mvn checkstyle:checkstyle`
+
 # JaCoCo
 
 To run the tests and generate the JaCoCo report, I ran the following commands in the terminal, in order.
