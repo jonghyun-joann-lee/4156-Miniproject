@@ -66,11 +66,11 @@ public class RouteControllerUnitTests {
 
   @Test
   public void retrieveCoursesFoundTwoTest() {
-    ResponseEntity<?> response = testRouteController.retrieveCourses(1004);
+    ResponseEntity<?> response = testRouteController.retrieveCourses(1001);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertNotNull(response.getBody());
-    assertTrue(response.getBody().toString().contains("COMS 1004"));
-    assertTrue(response.getBody().toString().contains("ECON 1004"));
+    assertTrue(response.getBody().toString().contains("PHYS 1001"));
+    assertTrue(response.getBody().toString().contains("PSYC 1001"));
   }
 
   @Test
