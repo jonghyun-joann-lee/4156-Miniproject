@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
@@ -26,12 +26,21 @@ public class RouteControllerUnitTests {
   /**
    * This sets up the test instances for testing methods in the RouteController class.
    */
-  @BeforeAll
-  public static void setupRouteControllerForTesting() {
+  @BeforeEach
+  public void setupRouteControllerForTesting() {
     // Use real data from data.txt to set up the test instance and disable saving data
     IndividualProjectApplication.myFileDatabase = new MyFileDatabase(0, "./data.txt");
     IndividualProjectApplication.overrideDatabase(IndividualProjectApplication.myFileDatabase);
     testRouteController = new RouteController();
+  }
+
+  @Test
+  public void indexTest() {
+    String expectedMessage = "Welcome, in order to make an API call direct your browser or Postman"
+        + " to an endpoint \n\n This can be done using the following format: \n\n "
+        + "http:127.0.0.1:8080/endpoint?arg=value";
+    String actualMessage = testRouteController.index();
+    assertEquals(expectedMessage, actualMessage);
   }
 
   @Test
@@ -50,6 +59,14 @@ public class RouteControllerUnitTests {
   }
 
   @Test
+  public void retrieveDepartmentExceptionTest() {
+    String emptyString = null;
+    ResponseEntity<?> response = testRouteController.retrieveDepartment(emptyString);
+    assertEquals(HttpStatus.INTERNAL_SERVER_ERROR, response.getStatusCode());
+    assertEquals("An Error has occurred", response.getBody());
+  }
+
+  @Test
   public void retrieveCourseSuccessTest() {
     ResponseEntity<?> response = testRouteController.retrieveCourse("COMS", 1004);
     assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -62,6 +79,13 @@ public class RouteControllerUnitTests {
     ResponseEntity<?> response = testRouteController.retrieveCourse("COMS", 7777);
     assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     assertEquals("Course Not Found", response.getBody());
+  }
+
+  @Test
+  public void retrieveCourseDeptNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.retrieveCourse("CONS", 1004);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Department Not Found", response.getBody());
   }
 
   @Test
@@ -100,6 +124,13 @@ public class RouteControllerUnitTests {
     ResponseEntity<?> response = testRouteController.isCourseFull("COMS", 1004);
     assertEquals(HttpStatus.OK, response.getStatusCode());
     assertFalse((Boolean) response.getBody());
+  }
+
+  @Test
+  public void isCourseFullNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.isCourseFull("ECON", 0001);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Course Not Found", response.getBody());
   }
 
   @Test
@@ -214,6 +245,13 @@ public class RouteControllerUnitTests {
     ResponseEntity<?> response = testRouteController.dropStudent("ELEN", 4702);
     assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
     assertEquals("Student has not been dropped.", response.getBody());
+  }
+
+  @Test
+  public void dropStudentCourseNotFoundTest() {
+    ResponseEntity<?> response = testRouteController.dropStudent("COMS", 9999);
+    assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+    assertEquals("Course Not Found", response.getBody());
   }
 
   @Test
