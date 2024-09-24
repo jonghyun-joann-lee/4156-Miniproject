@@ -32,10 +32,10 @@ jobs:
       run: mvn -B package --file IndividualProject/pom.xml
       
     - name: Run Unit Tests with Maven
-      run: mvn clean test
+      run: mvn -f IndividualProject/pom.xml clean test
       
     - name: Run Checkstyle
-      run: mvn checkstyle:check
+      run: mvn -f IndividualProject/pom.xml checkstyle:check
       
     - name: Run PMD
-      run: mvn pmd:check
+      run: mvn -f IndividualProject/pom.xml pmd:check
