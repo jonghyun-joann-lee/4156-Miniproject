@@ -117,6 +117,58 @@ public class CourseUnitTests {
     assertEquals("2:40-3:55", testCourse.getCourseTimeSlot());
   }
 
+  @Test
+  public void constructorInvalidInstructorTest() {
+    Course invalidCourse = new Course("", "309 HAV", "2:40-3:55", 400);
+    assertEquals("TBD", invalidCourse.getInstructorName());
+  }
+
+  @Test
+  public void constructorInvalidLocationTest() {
+    Course invalidCourse = new Course("Adam Cannon", " ", "2:40-3:55", 400);
+    assertEquals("TBD", invalidCourse.getCourseLocation());
+  }
+
+  @Test
+  public void constructorInvalidTimeSlotTest() {
+    Course invalidCourse = new Course("Adam Cannon", "309 HAV", "   ", 400);
+    assertEquals("TBD", invalidCourse.getCourseTimeSlot());
+  }
+
+  @Test
+  public void constructorInvalidCapacityTest() {
+    Course invalidCourse = new Course("Adam Cannon", "309 HAV", "2:40-3:55", -400);
+    assertEquals(10, invalidCourse.getEnrollmentCapacity());
+  }
+
+  @Test
+  public void reassignInstructorInvalidTest() {
+    String originalInstructor = testCourse.getInstructorName();
+    testCourse.reassignInstructor("    ");
+    assertEquals(originalInstructor, testCourse.getInstructorName());
+  }
+
+  @Test
+  public void reassignLocationInvalidTest() {
+    String originalLocation = testCourse.getCourseLocation();
+    testCourse.reassignLocation("  ");
+    assertEquals(originalLocation, testCourse.getCourseLocation());
+  }
+
+  @Test
+  public void reassignTimeInvalidTest() {
+    String originalTime = testCourse.getCourseTimeSlot();
+    testCourse.reassignTime("       ");
+    assertEquals(originalTime, testCourse.getCourseTimeSlot());
+  }
+
+  @Test
+  public void setEnrolledStudentCountInvalidTest() {
+    int originalCount = testCourse.getEnrolledStudentCount();
+    testCourse.setEnrolledStudentCount(-1);
+    assertEquals(originalCount, testCourse.getEnrolledStudentCount());
+  }
+
   /** The test course instance used for testing. */
   public static Course testCourse;
 }
