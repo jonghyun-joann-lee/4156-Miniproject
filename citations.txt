@@ -1,1 +1,1 @@
-I did not use any references.
+For I3 Writing a README part, I referred to the provided example (Griffin's README: https://github.com/griffinnewbold/COMS-4156-Service) to write my own. I referred to the overall structure and the parts that are shared across our projects, especially explaining how to build and run a local instance.
