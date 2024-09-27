@@ -173,7 +173,7 @@ You can check the style of the code and generate style checking reports using th
 
 Here is the latest report as of 09/27/2024. 
 
-![alt text](image-2.png)
+![alt text](reports/checkstyle.png)
 
 You can also run PMD to perform static analysis by running the following command: `mvn pmd:check`. The rulesets that will be used are the error-prone and default rulesets, which are configured like below in the pom.xml file. The results will be generated in a file named pmd.xml inside 'IndividualProject/target' and pmd.html inside 'IndividualProject/target/reports'.
 
@@ -193,7 +193,7 @@ You can also run PMD to perform static analysis by running the following command
 
 Here is the latest result of running PMD as of 09/27/2024.
 
-![alt text](image-3.png)
+![alt text](reports/pmd.png)
 
 ## Continuous Integration Report
 This respository uses GitHub Actions to perform continuous integration. You can view the latest results here: https://github.com/jonghyun-joann-lee/4156-Miniproject/actions/workflows/maven.yml
